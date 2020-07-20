@@ -12,3 +12,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 }
+
+
+
+// TODO: - HEre we will work with RecycleView
