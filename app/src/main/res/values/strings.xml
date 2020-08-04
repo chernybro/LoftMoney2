@@ -3,4 +3,13 @@
     <string name="edittext_name_hint">Title</string>
     <string name="edittext_price_hint">Price</string>
     <string name="add_button_title">Add</string>
+
+    <string name="price_with_currency">%s $</string>
+    <string name="expenses">Расходы</string>
+    <string name="incomes">Доходы</string>
+    <string name="title_activity_basic">BasicActivity</string>
+    <string name="welcome_login">Log in</string>
+    <string name="activity_name_toolbar">Учёт бюджета</string>
+
+
 </resources>

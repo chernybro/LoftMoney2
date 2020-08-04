@@ -1,5 +1,6 @@
 package com.cherny.loftmoney.cells.money;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,14 @@ public class MoneyAdapter extends RecyclerView.Adapter<MoneyAdapter.MoneyViewHol
     private List<MoneyCellModel> moneyCellModels = new ArrayList<>();
     private MoneyAdapterClick moneyAdapterClick;
 
+    private final int colorId;
+
+    public MoneyAdapter(final int colorId) {
+        this.colorId = colorId;
+    }
+
+
+
     public void setMoneyAdapterClick(MoneyAdapterClick moneyAdapterClick) {
         this.moneyAdapterClick = moneyAdapterClick;
     }
@@ -35,10 +44,23 @@ public class MoneyAdapter extends RecyclerView.Adapter<MoneyAdapter.MoneyViewHol
         notifyDataSetChanged();
     }
 
+    public void addItem(MoneyCellModel moneyCellModel) {
+        moneyCellModels.add(moneyCellModel);
+        notifyDataSetChanged();
+    }
+
+    public void clearItems() {
+        moneyCellModels.clear();
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public MoneyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MoneyViewHolder(moneyAdapterClick, LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_money, parent, false));
+        View itemView = View.inflate(parent.getContext(), R.layout.cell_money, null);
+
+        return new MoneyViewHolder(itemView, colorId);
+        //return new MoneyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_money, parent, false));
     }
 
     /*public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
@@ -61,30 +83,36 @@ public class MoneyAdapter extends RecyclerView.Adapter<MoneyAdapter.MoneyViewHol
     static class MoneyViewHolder extends RecyclerView.ViewHolder {
         private TextView nameView;
         private TextView valueView;
-        MoneyAdapterClick moneyAdapterClick;
+        //MoneyAdapterClick moneyAdapterClick;
 
-        public MoneyViewHolder(MoneyAdapterClick moneyAdapterClick, @NonNull View itemView) {
+        public MoneyViewHolder(@NonNull View itemView, final int colorId) {
             super(itemView);
-            this.moneyAdapterClick = moneyAdapterClick;
 
             nameView = itemView.findViewById(R.id.cellMoneyNameView);
             valueView = itemView.findViewById(R.id.cellMoneyValueView);
+
+            final Context context = valueView.getContext();
+            valueView.setTextColor(ContextCompat.getColor(context, colorId));
+
         }
-        public void bind(final MoneyCellModel moneyCellModels) {
-            itemView.setOnClickListener(new View.OnClickListener() {
+        public void bind(final MoneyCellModel moneyCellModel) {
+            /*itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     if (moneyAdapterClick != null) {
-                        moneyAdapterClick.onMoneyClick(moneyCellModels);
+                        moneyAdapterClick.onMoneyClick(moneyCellModel);
                     }
                 }
-            });
+            });*/
 
 
-            nameView.setText(moneyCellModels.getName());
-            valueView.setText(moneyCellModels.getValue());
-            valueView.setTextColor(ContextCompat.getColor(valueView.getContext(), moneyCellModels.getColor()));
+            nameView.setText(moneyCellModel.getName());
+           // valueView.setText(moneyCellModel.getPrice());
+            valueView.setText(
+                  valueView.getContext().getResources().getString(R.string.price_with_currency, String.valueOf(moneyCellModel.getPrice()))
+           );
+            //valueView.setTextColor(ContextCompat.getColor(valueView.getContext(), moneyCellModel.getColor()));
 
 
         }

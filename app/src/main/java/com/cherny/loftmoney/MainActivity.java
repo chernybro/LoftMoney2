@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.view.View;
 import com.cherny.loftmoney.cells.money.MoneyAdapter;
 import com.cherny.loftmoney.cells.money.MoneyCellModel;
 import com.cherny.loftmoney.remote.MoneyItem;
-import com.cherny.loftmoney.remote.MoneyResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -27,8 +25,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-
-import static com.cherny.loftmoney.BudgetFragment.REQUEST_CODE;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -65,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         configureAddExpenseView();
     }
 
-
     private void configureAddExpenseView() {
           /*floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }); */
     }
+
 
     static class BudgetPagerAdapter extends FragmentPagerAdapter {
 
