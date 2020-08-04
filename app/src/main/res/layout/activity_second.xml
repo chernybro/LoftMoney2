@@ -1,9 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SecondActivity">
+    android:background="@color/colorPrimary"
+    android:gravity="center"
+    >
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_basic"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="32dp"
+        style="@style/MyTextStyle"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/enter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="normal"
+        android:textColor="@color/colorPrimary"
+        android:text="@string/welcome_login"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        app:cornerRadius="24dp"
+        android:background="@drawable/default_button_background"
+        app:backgroundTint="@android:color/white"
+        />
+
+</LinearLayout>
