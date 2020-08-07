@@ -35,5 +35,8 @@ public interface MoneyApi {
     @POST("items/add")
     Call<AuthResponse> addItem(@Body MoneyItem moneyItem, @Query("auth-token") String token);
 
+    @POST("items/remove")
+    Call<AuthResponse> removeItem(@Query("id") String id, @Query("auth-token") String token);
+
 
 }

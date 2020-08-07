@@ -7,11 +7,20 @@ public class MoneyCellModel {
     private String name;
     private int price;
     private int color;
+    private int id;
 
     public MoneyCellModel(String name, int price, int color) {
         this.name = name;
         this.price = price;
         this.color = color;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public static MoneyCellModel getInstance(MoneyItem moneyItem) {
