@@ -1,4 +1,4 @@
-package com.cherny.loftmoney;
+package com.cherny.loftmoney.balance;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,10 +9,12 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import com.cherny.loftmoney.R;
+
 public class BalanceView extends View {
 
-    private float expenses = 100;
-    private float incomes = 100;
+    private int expenses = 100;
+    private int incomes = 100;
 
     private Paint expensePaint = new Paint();
     private Paint incomePaint = new Paint();
@@ -37,7 +39,7 @@ public class BalanceView extends View {
         init();
     }
 
-    public void update(float expenses, float incomes) {
+    public void update(int expenses, int incomes) {
         this.expenses = expenses;
         this.incomes = incomes;
 
@@ -53,12 +55,12 @@ public class BalanceView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        float total = expenses + incomes;
+        int total = expenses + incomes;
 
-        float expenseAngle = 360f * expenses / total;
-        float incomesAngle = 360f * incomes / total;
+        int expenseAngle = 360 * expenses / total;
+        int incomesAngle = 360 * incomes / total;
 
-        int space = 15;
+        int space = 10;
         int size = Math.min(getWidth(), getHeight()) - space * 2;
         int xMargin = (getWidth() - size) / 2;
         int yMargin = (getHeight() - size) / 2;

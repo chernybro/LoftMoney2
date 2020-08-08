@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <TextView
         android:id="@+id/txtBalanceFinance"
@@ -61,6 +62,7 @@
             android:fontFamily="sans-serif-light" />
 
         <TextView
+            android:id="@+id/expense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5400₽"
@@ -101,6 +103,7 @@
             android:fontFamily="sans-serif-light" />
 
         <TextView
+            android:id="@+id/income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="74000₽"
@@ -117,11 +120,11 @@
         android:background="@color/dividerColor"
         app:layout_constraintTop_toBottomOf="@+id/llIncomes" />
 
-    <com.cherny.loftmoney.BalanceView
+    <com.cherny.loftmoney.balance.BalanceView
         android:id="@+id/balanceView"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_marginTop="36dp"
+        android:layout_width="176dp"
+        android:layout_height="165.1dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toBottomOf="@+id/dividerData"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

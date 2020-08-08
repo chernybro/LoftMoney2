@@ -138,6 +138,7 @@ public class BudgetFragment extends Fragment implements ItemsAdapterListener, Ac
                 for (MoneyCellModel item : items) {
                     moneyAdapter.addItem(item);
                 }
+                ((MainActivity)getActivity()).loadBalance();
             }
 
             @Override

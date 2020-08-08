@@ -16,6 +16,7 @@
     <string name="balance_finance_title">Available finance</string>
     <string name="expense">Expense</string>
     <string name="income">Income</string>
+    <string name="balance">Balance</string>
 
 
 </resources>

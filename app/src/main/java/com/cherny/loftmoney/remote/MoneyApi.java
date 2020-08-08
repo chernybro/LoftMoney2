@@ -1,5 +1,6 @@
 package com.cherny.loftmoney.remote;
 
+import com.cherny.loftmoney.balance.BalanceResponse;
 import com.cherny.loftmoney.cells.money.MoneyCellModel;
 
 import java.util.List;
@@ -38,5 +39,7 @@ public interface MoneyApi {
     @POST("items/remove")
     Call<AuthResponse> removeItem(@Query("id") String id, @Query("auth-token") String token);
 
+    @GET("balance")
+    Call<BalanceResponse> getBalance(@Query("auth-token") String token);
 
 }

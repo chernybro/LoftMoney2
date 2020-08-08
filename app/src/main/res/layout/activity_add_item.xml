@@ -44,7 +44,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:hint="@string/edittext_price_hint"
-            android:inputType="numberDecimal"
+            android:inputType="number"
             android:textColor="@color/expenseColor"
             android:textColorHint="@color/expenseColor"
             android:textSize="24sp"
