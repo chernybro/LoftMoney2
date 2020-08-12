@@ -10,18 +10,16 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 
 import com.cherny.loftmoney.remote.AuthApi;
 import com.cherny.loftmoney.remote.AuthResponse;
-import com.cherny.loftmoney.screens.login.LoginActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SplashActivity extends AppCompatActivity {
-    AuthApi authApi;
+    private AuthApi authApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +35,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onClick(final View view) {
                 finish();
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
 
@@ -46,19 +45,10 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             finish();
             startActivity(new Intent(this, MainActivity.class));
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
 
-    private void checkToken() {
-        String token = ((LoftApp) getApplication()).getSharedPreferences().getString((LoftApp.TOKEN_KEY),"");
-
-        if(TextUtils.isEmpty(token)){
-            routeToLogin();
-        }
-        else {
-            routeToMain();
-        }
-    }
 
     private void auth() {
         String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -82,13 +72,4 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
 
-    private void routeToMain() {
-        Intent mainIntent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(mainIntent);
-    }
-
-    private void routeToLogin() {
-        Intent loginIntent = new Intent(getApplicationContext(), LoginActivity.class);
-        startActivity(loginIntent);
-    }
 }

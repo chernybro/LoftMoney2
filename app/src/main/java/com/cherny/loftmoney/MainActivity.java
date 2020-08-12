@@ -2,6 +2,8 @@ package com.cherny.loftmoney;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -9,22 +11,14 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.ActionMode;
 import android.view.View;
 
-import com.cherny.loftmoney.cells.money.MoneyAdapter;
-import com.cherny.loftmoney.cells.money.MoneyCellModel;
-import com.cherny.loftmoney.remote.MoneyItem;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,17 +26,22 @@ public class MainActivity extends AppCompatActivity {
     public static final String EXPENSE = "expense";
     public static final String INCOME = "income";
 
+    private TabLayout mTabLayout;
+    private Toolbar mToolbar;
+    private FloatingActionButton floatingActionButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+        mTabLayout = findViewById(R.id.tabs);
+        mToolbar = findViewById(R.id.toolBar);
 
         final ViewPager viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(new BudgetPagerAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
 
-        FloatingActionButton floatingActionButton = findViewById(R.id.fab);
+        floatingActionButton = findViewById(R.id.fab);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,24 +50,33 @@ public class MainActivity extends AppCompatActivity {
                 Fragment activeFragment = getSupportFragmentManager().getFragments().get(activeFragmentIndex);
                 activeFragment.startActivityForResult(new Intent(MainActivity.this, AddItemActivity.class),
                         BudgetFragment.REQUEST_CODE);
+                overridePendingTransition(R.anim.from_rigth_in, R.anim.from_left_out);
             }
         });
 
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setText(R.string.expenses);
-        tabLayout.getTabAt(1).setText(R.string.incomes);
+        mTabLayout.setupWithViewPager(viewPager);
+        mTabLayout.getTabAt(0).setText(R.string.expenses);
+        mTabLayout.getTabAt(1).setText(R.string.incomes);
 
-        configureAddExpenseView();
+
     }
 
-    private void configureAddExpenseView() {
-          /*floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        }); */
+
+    @Override
+    public void onActionModeStarted(ActionMode mode) {
+        super.onActionModeStarted(mode);
+        floatingActionButton.hide();
+        mTabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.actionModeColor));
+        mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.actionModeColor));
     }
 
+    @Override
+    public void onActionModeFinished(ActionMode mode) {
+        super.onActionModeFinished(mode);
+        floatingActionButton.show();
+        mTabLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        mToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+    }
 
     static class BudgetPagerAdapter extends FragmentPagerAdapter {
 

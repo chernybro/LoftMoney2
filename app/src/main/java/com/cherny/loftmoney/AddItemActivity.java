@@ -26,6 +26,8 @@ public class AddItemActivity extends AppCompatActivity {
     private String mPrice;
 
 
+
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +93,14 @@ public class AddItemActivity extends AppCompatActivity {
     private void checkInputs() {
         mAddButton.setEnabled(mPrice != null && !mPrice.isEmpty() && mName != null && !mName.isEmpty());
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.from_left_in, R.anim.from_right_out);
+    }
 }
+
 
 
 /*@Override

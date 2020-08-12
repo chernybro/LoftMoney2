@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#AA3574fa</color>
     <color name="colorAccent">#ffc107</color>
 
+    <color name="actionModeColor">#333f59</color>
+    <color name="cellColor">#ffffff</color>
 
 
     <color name="expenseColor">#4a90e2</color>
@@ -15,5 +17,7 @@
     <color name="main_hint_color">#3574FA</color>
     <color name="main_button_color_enable">#7ED321</color>
     <color name="main_button_color_disable">#EAEAEA</color>
+    <color name="primaryTextColor">#666664</color>
+    <color name="orange">#ff9e57</color>
 
 </resources>

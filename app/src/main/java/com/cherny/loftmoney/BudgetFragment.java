@@ -1,11 +1,16 @@
 package com.cherny.loftmoney;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,25 +27,20 @@ import com.cherny.loftmoney.remote.AuthResponse;
 import com.cherny.loftmoney.remote.MoneyApi;
 import com.cherny.loftmoney.remote.MoneyItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BudgetFragment extends Fragment {
+public class BudgetFragment extends Fragment implements ItemsAdapterListener, ActionMode.Callback {
     public static final int REQUEST_CODE = 100;
     private static final String COLOR_ID = "colorId";
     private static final String TYPE = "fragmentType";
     public MoneyAdapter moneyAdapter;
 
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ActionMode mActionMode;
     private MoneyApi moneyApi;
 
     public static BudgetFragment newInstance(final int colorId, final String type) {
@@ -74,12 +74,10 @@ public class BudgetFragment extends Fragment {
             }
         });
         moneyAdapter = new MoneyAdapter(getArguments().getInt(COLOR_ID));
+        moneyAdapter.setListener(this);
         recyclerView.setAdapter(moneyAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),
              LinearLayoutManager.VERTICAL, false));
-
-        //generateExpenses();
-        //moneyAdapter.setData(generateIncomes());
 
         return view;
     }
@@ -111,7 +109,7 @@ public class BudgetFragment extends Fragment {
                         final Call<AuthResponse> call, final Response<AuthResponse> response
                 ) {
                     if (response.body().getStatus().equals("success")) {
-                        moneyAdapter.addItem(new MoneyCellModel(name, realPrice, R.color.textColor));
+                        loadItems();
                     }
                 }
 
@@ -150,30 +148,84 @@ public class BudgetFragment extends Fragment {
 
     }
 
-    /*public void onActivityResult(
-            final int requestCode, final int resultCode, @Nullable final Intent data
-    ) {
-        super.onActivityResult(requestCode, resultCode, data);
+    @Override
+    public void onItemClick(MoneyCellModel moneyCellModel, int position) {
 
-        int price;
-        try {
-            price = Integer.parseInt(data.getStringExtra("price"));
-        } catch (NumberFormatException e) {
-            price = 0;
+        if (mActionMode != null) {
+            moneyAdapter.toggleItem(position);
+            mActionMode.setTitle(getString(R.string.selected, String.valueOf(moneyAdapter.getSelectedSize())));
         }
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            moneyAdapter.addItem(new MoneyCellModel(data.getStringExtra("name"), price, R.color.incomeColor));
+    }
+
+    @Override
+    public void onItemLongClick(MoneyCellModel moneyCellModel, int position) {
+        if (mActionMode == null) {
+            getActivity().startActionMode(this);
         }
-    }*/
+        moneyAdapter.toggleItem(position);
+        if (mActionMode != null) {
+            mActionMode.setTitle(getString(R.string.selected, String.valueOf(moneyAdapter.getSelectedSize())));
+        }
+    }
 
+    @Override
+    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+        mActionMode = actionMode;
+        return true;
+    }
 
-    private List<MoneyCellModel> generateIncomes() {
-        List<MoneyCellModel> moneyCellModels = new ArrayList<>();
-        moneyCellModels.add(new MoneyCellModel("Зарплата.Июнь", 70000, R.color.incomeColor));
-        moneyCellModels.add(new MoneyCellModel("Премия", 7000, R.color.incomeColor));
-        moneyCellModels.add(new MoneyCellModel("Олег наконец-то вернул долг",
-                300000, R.color.incomeColor));
+    @Override
+    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+        MenuInflater menuInflater = new MenuInflater(getActivity());
+        menuInflater.inflate(R.menu.menu_delete, menu);
+        return true;
+    }
 
-        return moneyCellModels;
+    @Override
+    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.remove) {
+            new AlertDialog.Builder(getContext())
+                    .setMessage(R.string.confirmation)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            removeItems();
+                            mActionMode.finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }).show();
+        }
+        return true;
+    }
+
+    private void removeItems() {
+        String token = PreferenceManager.getDefaultSharedPreferences(getContext()).getString((LoftApp.TOKEN_KEY), "");
+        List<Integer> selectedItems = moneyAdapter.getSelectedItemsId();
+        for (Integer itemId: selectedItems) {
+            Call<AuthResponse> call = moneyApi.removeItem(String.valueOf(itemId.intValue()), token);
+            call.enqueue(new Callback<AuthResponse>() {
+                @Override
+                public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                    loadItems();
+                    moneyAdapter.clearSelections();
+                }
+
+                @Override
+                public void onFailure(Call<AuthResponse> call, Throwable t) {
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode actionMode) {
+        mActionMode = null;
+        moneyAdapter.clearSelections();
     }
 }
