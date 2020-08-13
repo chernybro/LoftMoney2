@@ -48,7 +48,7 @@ public class LoftApp extends Application {
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://loftschool.com/android-api/basic/v1/")
+                .baseUrl(BuildConfig.URL)
                 .build();
 
         moneyApi = retrofit.create(MoneyApi.class);
