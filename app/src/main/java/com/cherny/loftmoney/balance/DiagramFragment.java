@@ -46,8 +46,16 @@ public class DiagramFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_balance, null);
         myExpences = view.findViewById(R.id.expense);
         myIncome = view.findViewById(R.id.income);
-        totalFinances = view.findViewById(R.id.txtBalanceFinanceValue);
+        totalFinances = view.findViewById(R.id.total_finances);
         mBalanceView = view.findViewById(R.id.balanceView);
+        mSwipeRefreshLayout = view.findViewById(R.id.balance_swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                loadBalance();
+            }
+        });
         return view;
     }
 
@@ -77,10 +85,12 @@ public class DiagramFragment extends Fragment {
                 myIncome.setText(String.valueOf(totalIncome));
                 totalFinances.setText(String.valueOf(totalIncome - totalExpences));
                 mBalanceView.update(totalExpences, totalIncome);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(final Call<BalanceResponse> call, final Throwable t) {
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
